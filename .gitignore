@@ -1,0 +1,21 @@
+# Byte-compiled
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Agents (superpowers is a submodule/clone)
+.agents/superpowers/
+.agents/skills/superpowers
