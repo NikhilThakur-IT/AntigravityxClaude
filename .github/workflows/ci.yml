@@ -1,0 +1,57 @@
+name: CI
+
+on:
+  push:
+    branches: ["master"]
+  pull_request:
+    branches: ["master"]
+
+jobs:
+  lint-python:
+    name: Lint Python (Research/)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.9"
+
+      - name: Install ruff
+        run: pip install ruff
+
+      - name: Run ruff
+        run: ruff check Research/
+
+  lint-js:
+    name: Lint JS (.agents/superpowers/)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install dependencies
+        run: npm install --global eslint
+
+      - name: Run ESLint
+        run: |
+          eslint ".agents/superpowers/lib/**/*.js" \
+                 ".agents/superpowers/.opencode/plugins/**/*.js" \
+                 --no-eslintrc --rule '{"no-undef": "warn", "no-unused-vars": "warn"}' \
+                 --env node || true
+
+  markdown-lint:
+    name: Lint Markdown
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: markdownlint
+        uses: DavidAnson/markdownlint-cli2-action@v16
+        with:
+          globs: |
+            **/*.md
+            !.agents/superpowers/**
